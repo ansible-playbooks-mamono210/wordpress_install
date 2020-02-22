@@ -1,0 +1,24 @@
+- name: Copy 'my.cnf' to '/root/.my.cnf'
+  template:
+    src: my.cnf
+    dest: /root/.my.cnf
+    mode: 0600
+
+- name: Create Database 
+  mysql_db:
+    name: '{{ db_name }}'
+    login_password: '{{ mariadb_root_password }}'
+    state: present
+
+- name: Grant permissions to {{ db_user }} on {{ db_name }}
+  mysql_user:
+    name: '{{ db_user }}'
+    password: '{{ db_password }}'
+    state: present
+    priv: "{{db_name }}.*:ALL"
+    host: localhost
+
+- name: Delete '/root/.my.cnf'
+  file:
+    path: /root/.my.cnf
+    state: absent

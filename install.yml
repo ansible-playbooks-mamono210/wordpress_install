@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: true
+
+  roles:
+    - role: geerlingguy.repo-epel
+    - role: geerlingguy.repo-remi
+    - role: php/install
+    - role: mariadb/install
+    - role: mariadb/create-database
+    - role: install

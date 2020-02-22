@@ -1,0 +1,72 @@
+- name: Install WP-CLI
+  include_role:
+    name: wp-cli
+
+- name: Create WordPress install directory
+  file:
+    dest: '{{ wp_install_path }}'
+    state: directory
+    owner: apache
+    group: apache
+    mode: 0755
+    recurse: yes
+
+- name: Retrieve WordPress and unarchive
+  shell:
+    "sudo -u apache /usr/local/bin/wp core download
+     --path={{ wp_install_path }}"
+
+- name: Create and configure 'wp-config.php'
+  shell:
+    "sudo -u apache /usr/local/bin/wp core config
+     --dbname={{ db_name }}
+     --dbuser={{ db_user }}
+     --dbpass={{ db_password }}
+     --dbhost={{ db_host }}
+     --dbprefix={{ db_prefix }}"
+  args:
+    chdir: '{{ wp_install_path }}'
+
+- name: Install WordPress
+  shell:
+    "sudo -u apache /usr/local/bin/wp core install
+     --url={{ wp_url }}
+     --title={{ wp_title }}
+     --admin_user={{ wp_admin_user }}
+     --admin_password={{ wp_admin_password }}
+     --admin_email={{ wp_admin_email }}
+     --allow-root"
+  args:
+    chdir: '{{ wp_install_path }}'
+
+- name: Install Japanese language kit 
+  shell:
+    "sudo -u apache /usr/local/bin/wp core language install ja"
+  args:
+    chdir: '{{ wp_install_path }}'
+
+- name: Localize WordPress for Japanese 
+  shell:
+    "sudo -u apache /usr/local/bin/wp core language activate ja"
+  args:
+    chdir: '{{ wp_install_path }}'
+
+- name: Copy "{{ httpd_conf_confd }} to '/etc/httpd/conf.d/'"
+  file:
+    path: "/etc/httpd/conf.d/{{ httpd_conf_confd }}"
+    state: touch
+    mode: 0644
+
+- name: "Enable .htaccess"
+  blockinfile:
+    path: "/etc/httpd/conf.d/{{ httpd_conf_confd }}"
+    block: |
+      <Directory "{{ wp_install_path }}">
+        AllowOverride All
+      </Directory>
+
+- name: Restart httpd 
+  service:
+    name: httpd
+    state: restarted
+    enabled: yes

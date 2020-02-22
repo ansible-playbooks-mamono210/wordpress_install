@@ -1,0 +1,29 @@
+- name: "Install PHP with remi: {{ remi_repo }}"
+  yum:
+    name:
+      - php
+      - php-gd
+      - php-gmp
+      - php-intl
+      - php-ldap
+      - php-mbstring
+      - php-mcrypt
+      - php-mysqlnd
+      - php-opcache
+      - php-pdo
+      - php-pear
+      - php-pear-Net-Curl
+      - php-pecl-apcu-bc
+      - php-pecl-redis
+      - php-pecl-zip
+      - php-soap
+      - php-xml
+    enablerepo: '{{ remi_repo }}'
+    state: present
+
+- name: Set timezone to Asia/Tokyo
+  ini_file:
+    dest: /etc/php.ini
+    section: Date
+    option: date.timezone
+    value: "Asia/Tokyo"

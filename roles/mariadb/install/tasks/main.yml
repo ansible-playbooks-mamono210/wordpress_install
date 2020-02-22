@@ -1,0 +1,64 @@
+- name: Enable the MariaDB repository 
+  yum_repository:
+    name: mariadb
+    file: MariaDB
+    description: MariaDB
+    baseurl: http://yum.mariadb.org/10.1/centos7-amd64
+    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+    gpgcheck: yes
+    state: present
+
+- name: Install mariadb-devel and mariadb-server
+  yum:
+    name:
+      - MariaDB-devel
+      - MariaDB-server
+    state: present
+
+- name: Install MySQL-python
+  yum:
+    name: MySQL-python
+
+- name: Create '/etc/my.cnf'
+  template:
+    src: my.cnf
+    dest: /etc/my.cnf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Start and enable mariadb service
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
+
+- name: Delete anonymous user 
+  mysql_user:
+    name: ''
+    state: absent
+  register: result
+  ignore_errors: true
+
+- name: Delete test database
+  mysql_db:
+    name: test
+    state: absent
+  ignore_errors: true
+
+- name: Set root password
+  mysql_user:
+    name: root
+    host: "{{ item }}"
+    password: "{{ mariadb_root_password }}"
+  with_items:
+    - 127.0.0.1
+    - ::1
+    - localhost
+  ignore_errors: true
+
+- name: Restart mariadb service
+  service:
+    name: mariadb
+    state: restarted
+    enabled: yes

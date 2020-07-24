@@ -1,3 +1,4 @@
+---
 - name: Install WP-CLI
   include_role:
     name: wp-cli
@@ -39,13 +40,13 @@
   args:
     chdir: '{{ wp_install_path }}'
 
-- name: Install Japanese language kit 
+- name: Install Japanese language kit
   shell:
     "sudo -u apache /usr/local/bin/wp core language install ja"
   args:
     chdir: '{{ wp_install_path }}'
 
-- name: Localize WordPress for Japanese 
+- name: Localize WordPress for Japanese
   shell:
     "sudo -u apache /usr/local/bin/wp core language activate ja"
   args:
@@ -65,7 +66,7 @@
         AllowOverride All
       </Directory>
 
-- name: Restart httpd 
+- name: Restart httpd
   service:
     name: httpd
     state: restarted

@@ -1,3 +1,4 @@
+---
 - name: Check if WP-CLI is installed
   shell: sudo -u apache /usr/local/bin/wp --version --allow-root
   register: WPCLI_INSTALLED

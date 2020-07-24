@@ -1,3 +1,4 @@
+---
 - name: "Install PHP with remi: {{ remi_repo }}"
   yum:
     name:

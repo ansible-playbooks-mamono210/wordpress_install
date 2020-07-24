@@ -1,10 +1,11 @@
+---
 - name: Copy 'my.cnf' to '/root/.my.cnf'
   template:
     src: my.cnf
     dest: /root/.my.cnf
     mode: 0600
 
-- name: Create Database 
+- name: Create Database
   mysql_db:
     name: '{{ db_name }}'
     login_password: '{{ mariadb_root_password }}'

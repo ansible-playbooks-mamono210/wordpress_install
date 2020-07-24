@@ -1,4 +1,5 @@
-- name: Enable the MariaDB repository 
+---
+- name: Enable the MariaDB repository
   yum_repository:
     name: mariadb
     file: MariaDB
@@ -33,7 +34,7 @@
     state: started
     enabled: yes
 
-- name: Delete anonymous user 
+- name: Delete anonymous user
   mysql_user:
     name: ''
     state: absent

@@ -7,6 +7,14 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Set latest AMI image id to molecule.yml
+          command: |
+            git clone https://github.com/packer-tm/aws-ami_centos7.git
+            cd aws-ami_centos7
+            AMI_ID=$(git branch -a | grep ami- | sed 's/^[ \t]*remotes\/origin\///g')
+            cd ..
+            sed -i -e "s/'{{ AMI_ID }}'/${AMI_ID}/" molecule/default/molecule.yml
+      - run:
           name: Create galaxy dependencies file in 'molecule/default/'
           command: |
             cp roles/requirements.yml molecule/default/requirements.yml

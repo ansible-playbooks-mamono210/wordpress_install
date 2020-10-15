@@ -34,6 +34,11 @@
       retries: 300
       with_items: "{{ server.results }}"
 
+    - name: Delete remote keypair
+      ec2_key:
+        name: wordpress_install_molecule_key
+        state: absent
+
     # Mandatory configuration for Molecule to function.
 
     - name: Populate instance config

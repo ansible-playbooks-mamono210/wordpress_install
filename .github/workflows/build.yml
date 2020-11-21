@@ -1,8 +1,27 @@
 ---
-name: molecule
+name: build
 on: [deployment, push]
 
 jobs:
+  ansible-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install ansible-lint
+        run: |
+          pip install ansible-lint
+
+      - name: Execulte ansible-lint
+        run: |
+          ansible-lint
+
   molecule:
     runs-on: ubuntu-latest
 
@@ -51,3 +70,19 @@ jobs:
 
       - name: Show Molecule version
         run: molecule --version
+
+  trailing-whitespace:
+    name: Find Trailing Whitespace
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: harupy/find-trailing-whitespace@master
+
+  yamllint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: yaml-lint
+        uses: ibiqlik/action-yamllint@v1
+        with:
+          config_file: .yamllint

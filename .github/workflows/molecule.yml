@@ -1,0 +1,53 @@
+---
+name: molecule
+on: [deployment, push]
+
+jobs:
+  molecule:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run: |
+          pip install -r molecule/requirements.txt
+
+      - name: Create galaxy dependencies file in 'molecule/default/'
+        run: |
+          cp roles/requirements.yml molecule/default/requirements.yml
+
+      - name: Set latest AMI image id to environment variables
+        run: |
+          AMI_ID=$(aws ec2 describe-images \
+          --owners "${{ secrets.AMI_OWNER_ID }}" \
+          --filters "Name=name,Values=centos*" \
+          --query 'Images[*][CreationDate, ImageId, Name]' \
+          --output text | sort -r | awk 'NR==1 {print $2}')
+          echo "AMI_ID=${AMI_ID}" >> $GITHUB_ENV
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+
+      - name: Test with molecule
+        run: |
+          molecule test
+        env:
+          # AMI_ID: sotred in system environment variables
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+
+      - name: Show Ansible version
+        run: ansible --version
+
+      - name: Show Molecule version
+        run: molecule --version

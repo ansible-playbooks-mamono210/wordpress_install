@@ -12,6 +12,7 @@ provisioner:
   name: ansible
   playbooks:
     converge: ../../install.yml
+  log: true
 verifier:
   name: ansible
 scenario:

@@ -28,3 +28,4 @@
     section: Date
     option: date.timezone
     value: "Asia/Tokyo"
+    mode: 0755

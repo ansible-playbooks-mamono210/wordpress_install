@@ -13,23 +13,27 @@
     recurse: yes
 
 - name: Retrieve WordPress and unarchive
-  shell:
+  command:
     "sudo -u apache /usr/local/bin/wp core download
      --path={{ wp_install_path }}"
+  register: WP_DOWNLOAD
+  changed_when: WP_DOWNLOAD.stdout | length > 0
 
 - name: Create and configure 'wp-config.php'
-  shell:
+  command:
     "sudo -u apache /usr/local/bin/wp core config
      --dbname={{ db_name }}
      --dbuser={{ db_user }}
      --dbpass={{ db_password }}
      --dbhost={{ db_host }}
      --dbprefix={{ db_prefix }}"
+  register: WP_CONFIG
+  changed_when: WP_CONFIG.stdout | length > 0
   args:
     chdir: '{{ wp_install_path }}'
 
 - name: Install WordPress
-  shell:
+  command:
     "sudo -u apache /usr/local/bin/wp core install
      --url={{ wp_url }}
      --title={{ wp_title }}
@@ -37,18 +41,24 @@
      --admin_password={{ wp_admin_password }}
      --admin_email={{ wp_admin_email }}
      --allow-root"
+  register: WP_INSTALL
+  changed_when: WP_INSTALL.stdout | length > 0
   args:
     chdir: '{{ wp_install_path }}'
 
 - name: Install Japanese language kit
-  shell:
+  command:
     "sudo -u apache /usr/local/bin/wp core language install ja"
+  register: WP_LANG_INSTALL
+  changed_when: WP_LANG_INSTALL.stdout | length > 0
   args:
     chdir: '{{ wp_install_path }}'
 
 - name: Localize WordPress for Japanese
-  shell:
+  command:
     "sudo -u apache /usr/local/bin/wp core language activate ja"
+  register: WP_LANG_LOCALIZE
+  changed_when: WP_LANG_LOCALIZE.stdout | length > 0
   args:
     chdir: '{{ wp_install_path }}'
 

@@ -16,7 +16,7 @@
     name: '{{ db_user }}'
     password: '{{ db_password }}'
     state: present
-    priv: "{{db_name }}.*:ALL"
+    priv: "{{ db_name }}.*:ALL"
     host: localhost
 
 - name: Delete '/root/.my.cnf'

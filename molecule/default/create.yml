@@ -34,6 +34,7 @@
         description: "{{ security_group_name }}"
         rules: "{{ security_group_rules }}"
         rules_egress: "{{ security_group_rules_egress }}"
+      register: security_group
 
     - name: Test for presence of local keypair
       stat:
@@ -109,7 +110,8 @@
           'user': "{{ ssh_user }}",
           'port': "{{ ssh_port }}",
           'identity_file': "{{ keypair_path }}",
-          'instance_ids': "{{ item.instance_ids }}", }
+          'instance_ids': "{{ item.instance_ids }}",
+          'group_id': "{{ security_group.group_id }}", }
       with_items: "{{ ec2_jobs.results }}"
       register: instance_config_dict
       when: server.changed | bool

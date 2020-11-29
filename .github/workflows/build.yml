@@ -54,6 +54,11 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
+      - name: Set timestamp for making sure Molecule would create unique EC2 instance
+        run: |
+          TIMESTAMP=$(date --date "9 hours" "+%Y%m%d_%H:%M:%S")
+          echo "TIMESTAMP=${TIMESTAMP}" >> $GITHUB_ENV
+
       - name: Test with molecule
         run: |
           molecule test
@@ -65,6 +70,7 @@ jobs:
           VPC_SUBNET_ID: ${{ secrets.VPC_SUBNET_ID }}
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
+          # TIMESTAMP: sotred in system environment variables
 
       - name: Show Ansible version
         run: ansible --version

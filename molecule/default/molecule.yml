@@ -4,10 +4,12 @@ dependency:
 driver:
   name: ec2
 platforms:
-  - name: wordpress_install
+  - name: molecule_wordpress_install_${TIMESTAMP}
     image: ${AMI_ID}
     instance_type: t2.micro
     vpc_subnet_id: ${VPC_SUBNET_ID}
+    keypair_name: molecule_wordpress_install_${TIMESTAMP}
+    security_group_name: molecule_wordpress_install_${TIMESTAMP}
 provisioner:
   name: ansible
   playbooks:

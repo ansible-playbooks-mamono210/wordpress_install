@@ -12,6 +12,9 @@ platforms:
     security_group_name: molecule_wordpress_install_${TIMESTAMP}
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      callback_whitelist: ansible.posix.profile_tasks
   playbooks:
     converge: ../../install.yml
   log: true

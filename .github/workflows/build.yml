@@ -67,10 +67,13 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-          VPC_SUBNET_ID: ${{ secrets.VPC_SUBNET_ID }}
-          PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
+          PROFILE_TASKS_TASK_OUTPUT_LIMIT: '100'
+          PROFILE_TASKS_SORT_ORDER: 'none'
           # TIMESTAMP: sotred in system environment variables
+          TZ: 'Asia/Tokyo'
+          PY_COLORS: '1'
+          VPC_SUBNET_ID: ${{ secrets.VPC_SUBNET_ID }}
 
       - name: Show Ansible version
         run: ansible --version

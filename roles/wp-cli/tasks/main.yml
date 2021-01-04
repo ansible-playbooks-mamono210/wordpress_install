@@ -1,25 +1,25 @@
 ---
 - name: Check if WP-CLI is installed
-  command: sudo -u apache /usr/local/bin/wp --version --allow-root
+  ansible.builtin.command: sudo -u apache /usr/local/bin/wp --version --allow-root
   register: WPCLI_INSTALLED
   changed_when: False
   ignore_errors: True
 
 - name: Delete working directory
-  file:
+  ansible.builtin.file:
     path: '{{ wp_install_work_dir }}'
     state: absent
   when: WPCLI_INSTALLED is failed
 
 - name: Create working directory
-  file:
+  ansible.builtin.file:
     path: '{{ wp_install_work_dir }}'
     state: directory
     mode: 0755
   when: WPCLI_INSTALLED is failed
 
 - name: Retrieve WP-CLI execute file
-  get_url:
+  ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
     dest: '{{ wp_install_work_dir }}'
     owner: root
@@ -29,7 +29,7 @@
 
 - name: Register WP-CLI to command
   become: yes
-  command: mv wp-cli.phar /usr/local/bin/wp
+  ansible.builtin.command: mv wp-cli.phar /usr/local/bin/wp
   args:
     chdir: '{{ wp_install_work_dir }}'
   when: WPCLI_INSTALLED is failed

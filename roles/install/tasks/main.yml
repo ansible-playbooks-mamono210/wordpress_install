@@ -4,7 +4,7 @@
     name: wp-cli
 
 - name: Create WordPress install directory
-  file:
+  ansible.builtin.file:
     dest: '{{ wp_install_path }}'
     state: directory
     owner: apache
@@ -13,14 +13,14 @@
     recurse: yes
 
 - name: Retrieve WordPress and unarchive
-  command:
+  ansible.builtin.command:
     "sudo -u apache /usr/local/bin/wp core download
      --path={{ wp_install_path }}"
   register: WP_DOWNLOAD
   changed_when: WP_DOWNLOAD.stdout | length > 0
 
 - name: Create and configure 'wp-config.php'
-  command:
+  ansible.builtin.command:
     "sudo -u apache /usr/local/bin/wp core config
      --dbname={{ db_name }}
      --dbuser={{ db_user }}
@@ -33,7 +33,7 @@
     chdir: '{{ wp_install_path }}'
 
 - name: Install WordPress
-  command:
+  ansible.builtin.command:
     "sudo -u apache /usr/local/bin/wp core install
      --url={{ wp_url }}
      --title={{ wp_title }}
@@ -47,7 +47,7 @@
     chdir: '{{ wp_install_path }}'
 
 - name: Install Japanese language kit
-  command:
+  ansible.builtin.command:
     "sudo -u apache /usr/local/bin/wp core language install ja"
   register: WP_LANG_INSTALL
   changed_when: WP_LANG_INSTALL.stdout | length > 0
@@ -55,7 +55,7 @@
     chdir: '{{ wp_install_path }}'
 
 - name: Localize WordPress for Japanese
-  command:
+  ansible.builtin.command:
     "sudo -u apache /usr/local/bin/wp core language activate ja"
   register: WP_LANG_LOCALIZE
   changed_when: WP_LANG_LOCALIZE.stdout | length > 0
@@ -63,13 +63,13 @@
     chdir: '{{ wp_install_path }}'
 
 - name: Copy "{{ httpd_conf_confd }} to '/etc/httpd/conf.d/'"
-  file:
+  ansible.builtin.file:
     path: "/etc/httpd/conf.d/{{ httpd_conf_confd }}"
     state: touch
     mode: 0644
 
 - name: "Enable .htaccess"
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: "/etc/httpd/conf.d/{{ httpd_conf_confd }}"
     block: |
       <Directory "{{ wp_install_path }}">
@@ -77,7 +77,7 @@
       </Directory>
 
 - name: Restart httpd
-  service:
+  ansible.builtin.service:
     name: httpd
     state: restarted
     enabled: yes

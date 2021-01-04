@@ -1,6 +1,6 @@
 ---
 - name: "Install PHP with remi: {{ remi_repo }}"
-  yum:
+  ansible.builtin.yum:
     name:
       - php
       - php-gd
@@ -23,7 +23,7 @@
     state: present
 
 - name: Set timezone to Asia/Tokyo
-  ini_file:
+  community.general.ini_file:
     dest: /etc/php.ini
     section: Date
     option: date.timezone

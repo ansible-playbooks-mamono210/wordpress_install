@@ -1,6 +1,6 @@
 ---
 - name: Enable the MariaDB repository
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: mariadb
     file: MariaDB
     description: MariaDB
@@ -10,18 +10,18 @@
     state: present
 
 - name: Install mariadb-devel and mariadb-server
-  yum:
+  ansible.builtin.yum:
     name:
       - MariaDB-devel
       - MariaDB-server
     state: present
 
 - name: Install MySQL-python
-  yum:
+  ansible.builtin.yum:
     name: MySQL-python
 
 - name: Create '/etc/my.cnf'
-  template:
+  ansible.builtin.template:
     src: my.cnf
     dest: /etc/my.cnf
     owner: root
@@ -29,26 +29,26 @@
     mode: 0644
 
 - name: Start and enable mariadb service
-  service:
+  ansible.builtin.service:
     name: mariadb
     state: started
     enabled: yes
 
 - name: Delete anonymous user
-  mysql_user:
+  community.mysql.mysql_user:
     name: ''
     state: absent
   register: result
   ignore_errors: true
 
 - name: Delete test database
-  mysql_db:
+  community.mysql.mysql_db:
     name: test
     state: absent
   ignore_errors: true
 
 - name: Set root password
-  mysql_user:
+  community.mysql.mysql_user:
     name: root
     host: "{{ item }}"
     password: "{{ mariadb_root_password }}"
@@ -59,7 +59,7 @@
   ignore_errors: true
 
 - name: Restart mariadb service
-  service:
+  ansible.builtin.service:
     name: mariadb
     state: restarted
     enabled: yes

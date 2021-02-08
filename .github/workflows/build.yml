@@ -37,6 +37,10 @@ jobs:
         run: |
           pip install -r molecule/requirements.txt
 
+      - name: Install required Ansible Collections
+        run: |
+          ansible-galaxy collection install community.molecule
+
       - name: Create galaxy dependencies file in 'molecule/default/'
         run: |
           cp roles/requirements.yml molecule/default/requirements.yml

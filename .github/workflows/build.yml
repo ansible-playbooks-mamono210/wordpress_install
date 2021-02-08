@@ -80,7 +80,12 @@ jobs:
           VPC_SUBNET_ID: ${{ secrets.VPC_SUBNET_ID }}
 
       - name: Show Ansible version
-        run: ansible --version
+        run: |
+          pip list | grep ansible \
+          | GREP_COLORS='mt=01;34' egrep --color=always '[[:digit:]]' \
+          | GREP_COLORS='mt=01;34' egrep --color=always '\.' \
+          | GREP_COLORS='mt=01;33' egrep --color=always 'ansible.* '
+          ansible --version
 
       - name: Show Molecule version
         run: molecule --version

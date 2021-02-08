@@ -45,7 +45,7 @@ jobs:
         run: |
           AMI_ID=$(aws ec2 describe-images \
           --owners "${{ secrets.AMI_OWNER_ID }}" \
-          --filters "Name=name,Values=centos*" \
+          --filters "Name=name,Values=centos7-*" \
           --query 'Images[*][CreationDate, ImageId, Name]' \
           --output text | sort -r | awk 'NR==1 {print $2}')
           echo "AMI_ID=${AMI_ID}" >> $GITHUB_ENV

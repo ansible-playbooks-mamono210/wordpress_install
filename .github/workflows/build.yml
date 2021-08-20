@@ -95,13 +95,19 @@ jobs:
         run: |
           pip install -r molecule/requirements.txt
 
+      - name: Install required Ansible Collections and roles
+        run: |
+          ansible-galaxy collection install community.molecule
+          ansible-galaxy install -r molecule/default/requirements.yml
+
       - name: Create galaxy dependencies file in 'molecule/default/'
         run: |
           cp roles/requirements.yml molecule/default/requirements.yml
 
-      - name: Install required Ansible Collections
+      - name: Install required Ansible Collections and roles
         run: |
           ansible-galaxy collection install community.molecule
+          ansible-galaxy install -r molecule/default/requirements.yml
 
       - name: Set environment variable with timestamp for making sure Molecule would create unique AWS resources
         run: |
@@ -137,13 +143,20 @@ jobs:
         env:
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
-      - name: Set environment variable with timestamp for making sure Molecule would create unique AWS resources
+      - name: Set environment variables with timestamp for making sure Molecule would create unique AWS resources
         run: |
           TIMESTAMP=$(date --date "9 hours" "+%Y%m%d_%H:%M:%S")
+          VALUE=molecule_wordpress_install_${{ matrix.distro }}_${TIMESTAMP}
 
-          echo "PLATFORM_NAME=molecule_wordpress_install_${{ matrix.distro }}_${TIMESTAMP}" >> $GITHUB_ENV
-          echo "KEYPAIR_NAME=molecule_wordpress_install_${{ matrix.distro }}_${TIMESTAMP}" >> $GITHUB_ENV
-          echo "SECURITY_GROUP_NAME=molecule_wordpress_install_${{ matrix.distro }}_${TIMESTAMP}" >> $GITHUB_ENV
+          echo "PLATFORM_NAME=${VALUE}" >> $GITHUB_ENV
+          echo "KEYPAIR_NAME=${VALUE}" >> $GITHUB_ENV
+          echo "SECURITY_GROUP_NAME=${VALUE}" >> $GITHUB_ENV
+          echo "TAG_NAME=${VALUE}" >> $GITHUB_ENV
+
+      - name: Set AWS resource creator name to system environment variables
+        run: |
+          author_email=$(git show -s --format='%ae' ${{ github.sha }})
+          echo "CREATED_BY=$author_email" >> $GITHUB_ENV
 
       - name: Test with molecule
         run: |
@@ -160,6 +173,7 @@ jobs:
           PROFILE_TASKS_TASK_OUTPUT_LIMIT: '200'
           PY_COLORS: '1'
           # SECURITY_GROUP_NAME: sotred in system environment variables
+          # TAG_NAME: sotred in system environment variables
           TZ: 'Asia/Tokyo'
           VPC_SUBNET_ID: ${{ secrets.VPC_SUBNET_ID }}
 

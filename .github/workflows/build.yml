@@ -73,8 +73,8 @@ jobs:
   vm-centos7:
     uses: mamono210-github-actions-workflows/molecule-ec2/.github/workflows/workflows.yml@main
     with:
-      distro: centos7
-      tag-prefix: molecule_wordpress_install
+      ami-name: centos7-1*
+      tag-prefix: molecule_wordpress_install_centos7
     secrets:
       AMI_OWNER_ID: ${{ secrets.AMI_OWNER_ID }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

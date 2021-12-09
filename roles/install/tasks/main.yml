@@ -1,8 +1,4 @@
 ---
-- name: Install WP-CLI
-  include_role:
-    name: wp-cli
-
 - name: Create WordPress install directory
   ansible.builtin.file:
     dest: '{{ wp_install_path }}'

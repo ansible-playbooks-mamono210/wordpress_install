@@ -5,7 +5,7 @@
   roles:
     - role: geerlingguy.repo-epel
     - role: geerlingguy.repo-remi
-    - role: php/install
+    - role: mamono210.php
     - role: mariadb/install
     - role: mariadb/create-database
     - role: install

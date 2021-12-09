@@ -1,3 +1,6 @@
 ---
-- geerlingguy.repo-epel
-- geerlingguy.repo-remi
+roles:
+  - geerlingguy.repo-epel
+  - geerlingguy.repo-remi
+  - name: mamono210.php
+    src: https://github.com/ansible-roles-mamono210/php.git

@@ -10,4 +10,4 @@
     - role: mamono210.wp_cli
     - role: mariadb/install
     - role: mariadb/create-database
-    - role: install
+    - role: mamono210.wordpress_install

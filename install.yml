@@ -8,6 +8,6 @@
     - role: mamono210.httpd_install
     - role: mamono210.php
     - role: mamono210.wp_cli
-    - role: mariadb/install
+    - role: mamono210.mariadb_install
     - role: mariadb/create-database
     - role: mamono210.wordpress_install

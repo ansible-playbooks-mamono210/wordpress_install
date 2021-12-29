@@ -4,6 +4,11 @@ remi_repo: remi-php74
 # MariaDB root password
 mariadb_root_password: password
 
+# MariaDB database parameters
+mariadb_db_name: wordpress
+mariadb_db_user: wordpress
+mariadb_db_password: wordpress
+
 # Working directory
 wp_install_work_dir: /tmp/wp-install
 
@@ -17,9 +22,9 @@ wp_url: "http://{{ wp_host }}/{{ wp_install_dir }}"
 
 # WordPress database parameters
 #----------------------------------------------------
-db_name: wordpress
-db_user: wordpress
-db_password: wordpress
+db_name: "{{ mariadb_db_name }}"
+db_user: "{{ mariadb_db_user }}"
+db_password: "{{ mariadb_db_password }}"
 db_host: localhost
 db_port: 3306
 db_prefix: wp_

@@ -1,4 +1,4 @@
-[![](https://github.com/ansible-playbooks-centos7/wordpress_install/workflows/build/badge.svg)](https://github.com/ansible-playbooks-centos7/wordpress_install/actions?query=workflow%3Abuild)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/ansible-playbooks-mamono210/wordpress_install/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/ansible-playbooks-mamono210/wordpress_install/tree/main)
 
 # Ansible Playbook - Wordpress Install
 

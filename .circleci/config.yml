@@ -124,7 +124,7 @@ jobs:
 
 workflows:
   version: 2.1
-  redmica-install:
+  build:
     jobs:
       - trailing-whitespace
       - yamllint:

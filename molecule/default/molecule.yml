@@ -47,14 +47,11 @@ provisioner:
       - php-mcrypt
       - php-mysqlnd
       - php-opcache
-      - php-pdo
       - php-pear
-      - php-pear-Net-Curl
-      - php-pecl-apcu-bc
       - php-pecl-redis
       - php-pecl-zip
       - php-soap
-      - php-xml
+    remi_repo: php:remi-8.1
   log: true
   playbooks:
     converge: ../../install.yml

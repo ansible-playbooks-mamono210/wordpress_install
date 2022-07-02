@@ -75,7 +75,7 @@ jobs:
             molecule test
           environment:
             ANSIBLE_FORCE_COLOR: '1'
-            AMI_NAME: "centos7-1*"
+            AMI_NAME: "centos-stream8-1*"
             # AWS_ACCESS_KEY_ID: sotred in system environment variables
             # AWS_DEFAULT_REGION: sotred in CircleCI environment variables
             # AWS_SECRET_ACCESS_KEY: sotred in system environment variables

@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This program installs [WordPress](https://wordpress.com) on CentOS7.
+This program installs [WordPress](https://wordpress.com) on CentOS Stream 8.
 
 ## How To install
 

@@ -3,7 +3,7 @@
   become: true
 
   roles:
-    - role: geerlingguy.repo-epel
+    - role: mamono210.epel
     - role: geerlingguy.repo-remi
     - role: mamono210.httpd_install
     - role: mamono210.php

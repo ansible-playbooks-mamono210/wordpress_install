@@ -1,5 +1,5 @@
 # Remi repo PHP version
-remi_repo: remi-php74
+remi_repo: remi-php82
 
 # MariaDB root password
 mariadb_root_password: password

@@ -4,42 +4,44 @@
   connection: local
 
   tasks:
-    - name: Create instance config file
-      block:
-        - name: Populate instance config
-          ansible.builtin.set_fact:
-            instance_conf: "{{ lookup('file', molecule_instance_config) | from_yaml }}"
-            skip_instances: false
-      rescue:
-        - name: Populate instance config when file missing
-          ansible.builtin.set_fact:
-            instance_conf: {}
-            skip_instances: true
-
-    - name: Get image name
+    - name: Set build AMI flag
       ansible.builtin.set_fact:
-        distro_name: "{{ item.image_name | regex_replace('(.*)-.*', '\\1') }}"
+        build_ami: "{{ item.build_ami }}"
       loop: "{{ molecule_yml.platforms }}"
       loop_control:
         index_var: index
 
-    - name: Get current date and time in specific timezone
-      ansible.builtin.command: date "+%Y-%m-%d %H:%M:%S UTC%z"
-      environment:
-        TZ: 'Asia/Tokyo'
-      register: current_datetime
-      changed_when: false
+    - name: Build AMI
+      when: build_ami is defined and build_ami
+      block:
+        - name: Populate instance config
+          ansible.builtin.set_fact:
+            instance_conf: "{{ lookup('file', molecule_instance_config) | from_yaml }}"
 
-    - name: Get current epoch time
-      ansible.builtin.command: date +%s
-      register: current_epoch
-      changed_when: false
+        - name: Get image name
+          ansible.builtin.set_fact:
+            distro_name: "{{ item.image_name | regex_replace('(.*)-.*', '\\1') }}"
+          loop: "{{ molecule_yml.platforms }}"
+          loop_control:
+            index_var: index
 
-    - name: Register the running instance to an AMI
-      amazon.aws.ec2_ami:
-        instance_id: "{{ item.instance_ids }}"
-        name: "wordpress_golden_image-{{ distro_name }}-{{ current_epoch.stdout }}"
-        wait: yes
-        tags:
-          Name: "wordpress_golden_image-{{ distro_name }}-{{ current_datetime.stdout }}"
-      with_items: "{{ instance_conf }}"
+        - name: Get current date and time in specific timezone
+          ansible.builtin.command: date "+%Y-%m-%d %H:%M:%S UTC%z"
+          environment:
+            TZ: 'Asia/Tokyo'
+          register: current_datetime
+          changed_when: false
+
+        - name: Get current epoch time
+          ansible.builtin.command: date +%s
+          register: current_epoch
+          changed_when: false
+
+        - name: Register the running instance to an AMI
+          amazon.aws.ec2_ami:
+            instance_id: "{{ item.instance_ids }}"
+            name: "wordpress_golden_image-{{ distro_name }}-{{ current_epoch.stdout }}"
+            wait: yes
+            tags:
+              Name: "wordpress_golden_image-{{ distro_name }}-{{ current_datetime.stdout }}"
+          with_items: "{{ instance_conf }}"

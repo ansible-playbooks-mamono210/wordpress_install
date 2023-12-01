@@ -6,6 +6,7 @@ driver:
 platforms:
   - name: ${PLATFORM_NAME}
     ansible_user: ${ANSIBLE_USER}
+    build_ami: ${BUILD_AMI}
     image_name: ${AMI_NAME}
     image_owner: ${AMI_OWNER_ID}
     instance_type: ${INSTANCE_TYPE}

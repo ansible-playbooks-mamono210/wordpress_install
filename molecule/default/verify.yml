@@ -25,6 +25,29 @@
         mode: preserve
       delegate_to: localhost
 
+    - name: Set WordPress URL
+      ansible.builtin.command:
+        cmd:
+          "sudo -u apache /usr/local/bin/wp search-replace
+           {{ wp_url }}
+           http://{{ public_ip }}/{{ wp_install_dir }}
+           --all-tables
+           --allow-root"
+      register: wp_config
+      changed_when: wp_config.stdout | length > 0
+      args:
+        chdir: '{{ wp_install_path }}'
+
+    - name: Reload httpd
+      ansible.builtin.systemd_service:
+        name: httpd.service
+        state: reloaded
+
+    - name: Set SELinux to Permissive mode.
+      ansible.posix.selinux:
+        state: permissive
+        policy: targeted
+
     - name: Execute selenium
       ansible.builtin.command:
         cmd: "{{ results.ansible_facts.ansible_python.executable }} screenshot.py"

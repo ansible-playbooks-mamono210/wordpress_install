@@ -53,6 +53,10 @@ provisioner:
       - php-pecl-zip
       - php-soap
     remi_repo: php:remi-8.1
+    wp_install_dir: wordpress
+    wp_install_path: "/var/www/html/{{ wp_install_dir }}"
+    wp_host: localhost
+    wp_url: "http://{{ wp_host }}/{{ wp_install_dir }}"
   log: true
   playbooks:
     converge: ../../install.yml

@@ -1,5 +1,25 @@
 # Remi repo PHP version
-remi_repo: remi-php82
+remi_repo: 'php:remi-8.1'
+
+# PHP packages
+php_packages:
+  - php
+  - php-gd
+  - php-gmp
+  - php-intl
+  - php-ldap
+  - php-mbstring
+  - php-mcrypt
+  - php-mysqlnd
+  - php-opcache
+  - php-pdo
+  - php-pear
+  - php-pear-Net-Curl
+  - php-pecl-apcu-bc
+  - php-pecl-redis
+  - php-pecl-zip
+  - php-soap
+  - php-xml
 
 # MariaDB root password
 mariadb_root_password: password

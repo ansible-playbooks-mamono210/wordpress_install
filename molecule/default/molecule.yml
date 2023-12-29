@@ -38,21 +38,6 @@ provisioner:
       callbacks_enabled: ansible.posix.profile_tasks
   connection_options:
     ansible_user: ${ANSIBLE_USER}
-    php_packages:
-      - php
-      - php-gd
-      - php-gmp
-      - php-intl
-      - php-ldap
-      - php-mbstring
-      - php-mcrypt
-      - php-mysqlnd
-      - php-opcache
-      - php-pear
-      - php-pecl-redis
-      - php-pecl-zip
-      - php-soap
-    remi_repo: php:remi-8.1
     wp_install_dir: wordpress
     wp_install_path: "/var/www/html/{{ wp_install_dir }}"
     wp_host: localhost

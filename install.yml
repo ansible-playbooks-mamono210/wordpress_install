@@ -3,11 +3,27 @@
   hosts: all
   become: true
 
+  # When using the Ansible Plugin with Packer, variables defined in 'group_vars/*' are overridden by variables defined in the 'defaults/main.yml' of a Role. Therefore, it's necessary to define the variables directly in the playbook.
   roles:
     - role: mamono210.epel
     - role: mamono210.remi
+      vars:
+        remi_repo: php:remi-8.1
     - role: mamono210.httpd_install
     - role: mamono210.php
+      vars:
+        php_packages:
+          - php
+          - php-gd
+          - php-gmp
+          - php-intl
+          - php-ldap
+          - php-mcrypt
+          - php-mysqlnd
+          - php-pear
+          - php-pecl-redis
+          - php-pecl-zip
+          - php-soap
     - role: mamono210.wp_cli
     - role: mamono210.mariadb_install
     - role: mamono210.mariadb_create_db

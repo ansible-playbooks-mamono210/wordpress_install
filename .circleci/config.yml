@@ -117,18 +117,6 @@ workflows:
           requires:
             - yamllint
       - molecule:
-          ansible-user: 'centos'
-          aws-ami-name: 'centos-stream8-1*'
-          aws-ami-owner-id: '808683561341'
-          aws-instance-type: 't2.small'
-          aws-resource-name: 'circleci_ansible-playbook_wp_install_cs8'
-          aws-vpc-subnet-id: 'subnet-022a704b3061b8b39'
-          circleci-timeout: '20m'
-          molecule-scenario-name: 'default'
-          context: AWS_OPENID_CONNECT_TOKENS
-          requires:
-            - ansible-lint
-      - molecule:
           ansible-user: 'ec2-user'
           aws-ami-name: 'centos-stream9-1*'
           aws-ami-owner-id: '808683561341'

@@ -2,5 +2,5 @@ ansible
 boto
 boto3
 docker
-molecule==5.1.0
+molecule
 selenium

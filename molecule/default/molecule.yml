@@ -2,7 +2,7 @@
 dependency:
   name: galaxy
 driver:
-  name: delegated
+  name: default
 platforms:
   - name: ${PLATFORM_NAME}
     ansible_user: ${ANSIBLE_USER}
@@ -54,7 +54,6 @@ verifier:
   name: ansible
 scenario:
   test_sequence:
-    - dependency
     - cleanup
     - destroy
     - syntax

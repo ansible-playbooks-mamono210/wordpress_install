@@ -60,6 +60,5 @@ scenario:
     - create
     - converge
     - verify
-    - side_effect
     - cleanup
     - destroy
